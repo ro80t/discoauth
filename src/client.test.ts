@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { avatarUrl, DiscordOAuth2, DiscordOAuth2Error } from "./index.ts";
+import { DiscordOAuth2 } from "./client.ts";
+import { DiscordOAuth2Error } from "./error.ts";
 
 const json = (status: number, body: unknown) =>
   new Response(status === 204 ? null : JSON.stringify(body), { status });
@@ -73,12 +74,4 @@ describe("DiscordOAuth2", () => {
     expect(JSON.parse(fetch.mock.calls[1]![1].body as string)).toEqual({ access_token: "t" });
     expect(await oauth.joinGuild("t", "g", "u")).toBe("already_member");
   });
-});
-
-it("avatarUrl picks gif for animated hashes", () => {
-  expect(avatarUrl({ id: "1", avatar: "a_x" }, 64)).toBe(
-    "https://cdn.discordapp.com/avatars/1/a_x.gif?size=64",
-  );
-  expect(avatarUrl({ id: "1", avatar: "x" })).toBe("https://cdn.discordapp.com/avatars/1/x.png");
-  expect(avatarUrl({ id: "1", avatar: null })).toBeNull();
 });
