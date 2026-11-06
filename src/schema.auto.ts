@@ -101,6 +101,58 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/oauth2/userinfo": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["get_openid_connect_userinfo"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/users/@me/applications/{application_id}/role-connection": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    get: operations["get_application_user_role_connection"];
+    put: operations["update_application_user_role_connection"];
+    post?: never;
+    delete: operations["delete_application_user_role_connection"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/users/@me/applications/{application_id}/entitlements": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    get: operations["get_current_user_application_entitlements"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -152,6 +204,13 @@ export interface components {
     };
     /** Format: int32 */
     ApplicationTypes: number & 4;
+    ApplicationUserRoleConnectionResponse: {
+      platform_name?: string;
+      platform_username?: string | null;
+      metadata?: {
+        [key: string]: string;
+      };
+    };
     AvailableLocalesEnum: string &
       (
         | "ar"
@@ -250,6 +309,31 @@ export interface components {
     };
     /** Format: int32 */
     ConnectedAccountVisibility: number & (0 | 1);
+    EntitlementResponse: {
+      id: components["schemas"]["SnowflakeType"];
+      sku_id: components["schemas"]["SnowflakeType"];
+      application_id: components["schemas"]["SnowflakeType"];
+      user_id: components["schemas"]["SnowflakeType"];
+      guild_id?: null | components["schemas"]["SnowflakeType"];
+      deleted: boolean;
+      /** Format: date-time */
+      starts_at: string | null;
+      /** Format: date-time */
+      ends_at: string | null;
+      type: components["schemas"]["EntitlementTypes"];
+      /** Format: date-time */
+      fulfilled_at?: string | null;
+      fulfillment_status?:
+        | null
+        | components["schemas"]["EntitlementTenantFulfillmentStatusResponse"];
+      consumed?: boolean;
+      gifter_user_id?: null | components["schemas"]["SnowflakeType"];
+      parent_id?: null | components["schemas"]["SnowflakeType"];
+    };
+    /** Format: int32 */
+    EntitlementTenantFulfillmentStatusResponse: number & (0 | 1 | 2 | 3 | 4 | 5 | 6 | 7);
+    /** Format: int32 */
+    EntitlementTypes: number & (8 | 10);
     GuildFeatures: string &
       (
         | "ANIMATED_BANNER"
@@ -362,6 +446,15 @@ export interface components {
       scopes: components["schemas"]["OAuth2Scopes"][];
       user?: components["schemas"]["UserResponse"];
     };
+    OAuth2GetOpenIDConnectUserInfoResponse: {
+      sub: string;
+      email?: string | null;
+      email_verified?: boolean;
+      preferred_username?: string;
+      nickname?: string | null;
+      picture?: string;
+      locale?: string;
+    };
     OAuth2Scopes: string &
       (
         | "identify"
@@ -446,6 +539,13 @@ export interface components {
     };
     /** Format: snowflake */
     SnowflakeType: string;
+    UpdateApplicationUserRoleConnectionRequest: {
+      platform_name?: string | null;
+      platform_username?: string | null;
+      metadata?: {
+        [key: string]: string;
+      } | null;
+    };
     UserAvatarDecorationResponse: {
       /** @description the avatar decoration hash */
       asset: string;
@@ -817,6 +917,154 @@ export interface operations {
       "4XX": components["responses"]["ClientErrorResponse"];
     };
   };
+  get_openid_connect_userinfo: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 200 response for get_openid_connect_userinfo */
+      200: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OAuth2GetOpenIDConnectUserInfoResponse"];
+        };
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
+  get_application_user_role_connection: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 200 response for get_application_user_role_connection */
+      200: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ApplicationUserRoleConnectionResponse"];
+        };
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
+  update_application_user_role_connection: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateApplicationUserRoleConnectionRequest"];
+      };
+    };
+    responses: {
+      /** @description 200 response for update_application_user_role_connection */
+      200: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ApplicationUserRoleConnectionResponse"];
+        };
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
+  delete_application_user_role_connection: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 204 response for delete_application_user_role_connection */
+      204: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
+  get_current_user_application_entitlements: {
+    parameters: {
+      query?: {
+        sku_ids?: string | (null | components["schemas"]["SnowflakeType"])[];
+        exclude_consumed?: boolean;
+      };
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 200 response for get_current_user_application_entitlements */
+      200: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["EntitlementResponse"][];
+        };
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
 }
 
 export type OAuth2Scope =
@@ -827,6 +1075,7 @@ export type OAuth2Scope =
   | "applications.builds.upload"
   | "applications.commands"
   | "applications.commands.permissions.update"
+  | "applications.commands.update"
   | "applications.entitlements"
   | "applications.store.update"
   | "bot"

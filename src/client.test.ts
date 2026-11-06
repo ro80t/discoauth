@@ -74,4 +74,17 @@ describe("DiscordOAuth2", () => {
     expect(JSON.parse(fetch.mock.calls[1]![1].body as string)).toEqual({ access_token: "t" });
     expect(await oauth.joinGuild("t", "g", "u")).toBe("already_member");
   });
+
+  it("requests client_credentials and scopes role connections to clientId", async () => {
+    const { oauth, fetch } = setup(json(200, { access_token: "a" }), json(200, {}));
+    await oauth.clientCredentials(["identify", "applications.commands.update"]);
+    expect(Object.fromEntries(fetch.mock.calls[0]![1].body as URLSearchParams)).toMatchObject({
+      grant_type: "client_credentials",
+      scope: "identify applications.commands.update",
+    });
+    await oauth.getRoleConnection("t");
+    expect(fetch.mock.calls[1]![0]).toBe(
+      "https://discord.com/api/v10/users/@me/applications/id/role-connection",
+    );
+  });
 });

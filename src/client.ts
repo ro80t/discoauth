@@ -1,24 +1,31 @@
-import { DiscordOAuth2Error } from "./error.ts";
+import { REST } from "./rest.ts";
+import type { OAuth2Scope } from "./schema.auto.ts";
 import type {
   AddGuildMemberBody,
   Authorization,
   AuthorizeUrlOptions,
   Connection,
   DiscordOAuth2Options,
+  Entitlement,
   GuildMember,
+  ListEntitlementsQuery,
   ListGuildsQuery,
   PartialGuild,
+  RoleConnection,
   TokenResponse,
+  UpdateRoleConnectionBody,
   User,
+  UserInfo,
 } from "./types.ts";
 
-export const API_BASE = "https://discord.com/api/v10";
-
 export class DiscordOAuth2 {
-  readonly #options: Required<Omit<DiscordOAuth2Options, "botToken">> & { botToken?: string };
+  readonly #options: DiscordOAuth2Options;
+  /** Typed access to every endpoint in the schema, for anything the helpers below don't cover. */
+  readonly rest: REST;
 
   constructor(options: DiscordOAuth2Options) {
-    this.#options = { timeout: 10_000, maxRetries: 3, fetch: globalThis.fetch, ...options };
+    this.#options = options;
+    this.rest = new REST(options);
   }
 
   authorizeUrl({ scope, state, prompt }: AuthorizeUrlOptions): string {
@@ -45,43 +52,93 @@ export class DiscordOAuth2 {
     return this.#token({ grant_type: "refresh_token", refresh_token: refreshToken });
   }
 
+  /** Token for the app's own (bot owner's) account; no refresh token is issued. */
+  clientCredentials(scope: OAuth2Scope[]): Promise<Omit<TokenResponse, "refresh_token">> {
+    return this.#token({ grant_type: "client_credentials", scope: scope.join(" ") });
+  }
+
   async revokeToken(
     token: string,
     tokenTypeHint: "access_token" | "refresh_token" = "access_token",
   ): Promise<void> {
-    await this.#fetch("/oauth2/token/revoke", {
+    await this.rest.raw("/oauth2/token/revoke", {
       method: "POST",
       body: this.#form({ token, token_type_hint: tokenTypeHint }),
     });
   }
 
   getAuthorization(accessToken: string): Promise<Authorization> {
-    return this.#bearer(accessToken, "/oauth2/@me");
+    return this.rest.request("get", "/oauth2/@me", { auth: `Bearer ${accessToken}` });
   }
 
   /** Requires `identify` (and `email` for the email field). */
   getUser(accessToken: string): Promise<User> {
-    return this.#bearer(accessToken, "/users/@me");
+    return this.rest.request("get", "/users/@me", { auth: `Bearer ${accessToken}` });
+  }
+
+  /** OpenID Connect userinfo. Requires `openid`. */
+  getUserInfo(accessToken: string): Promise<UserInfo> {
+    return this.rest.request("get", "/oauth2/userinfo", { auth: `Bearer ${accessToken}` });
   }
 
   /** Requires `guilds`. */
   getGuilds(accessToken: string, query: ListGuildsQuery = {}): Promise<PartialGuild[]> {
-    const params = new URLSearchParams(
-      Object.entries(query)
-        .filter(([, v]) => v != null)
-        .map(([k, v]) => [k, String(v)]),
-    );
-    return this.#bearer(accessToken, `/users/@me/guilds?${params}`);
+    return this.rest.request("get", "/users/@me/guilds", {
+      auth: `Bearer ${accessToken}`,
+      query,
+    }) as Promise<PartialGuild[]>;
   }
 
   /** Requires `guilds.members.read`. */
   getGuildMember(accessToken: string, guildId: string): Promise<GuildMember> {
-    return this.#bearer(accessToken, `/users/@me/guilds/${encodeURIComponent(guildId)}/member`);
+    return this.rest.request("get", "/users/@me/guilds/{guild_id}/member", {
+      auth: `Bearer ${accessToken}`,
+      path: { guild_id: guildId },
+    });
   }
 
   /** Requires `connections`. */
   getConnections(accessToken: string): Promise<Connection[]> {
-    return this.#bearer(accessToken, "/users/@me/connections");
+    return this.rest.request("get", "/users/@me/connections", {
+      auth: `Bearer ${accessToken}`,
+    }) as Promise<Connection[]>;
+  }
+
+  /** The user's entitlements for this app. */
+  getEntitlements(accessToken: string, query: ListEntitlementsQuery = {}): Promise<Entitlement[]> {
+    return this.rest.request("get", "/users/@me/applications/{application_id}/entitlements", {
+      auth: `Bearer ${accessToken}`,
+      path: { application_id: this.#options.clientId },
+      query,
+    }) as Promise<Entitlement[]>;
+  }
+
+  /** Linked Roles metadata for this app. Requires `role_connections.write`. */
+  getRoleConnection(accessToken: string): Promise<RoleConnection> {
+    return this.rest.request("get", "/users/@me/applications/{application_id}/role-connection", {
+      auth: `Bearer ${accessToken}`,
+      path: { application_id: this.#options.clientId },
+    });
+  }
+
+  /** Requires `role_connections.write`. */
+  updateRoleConnection(
+    accessToken: string,
+    body: UpdateRoleConnectionBody,
+  ): Promise<RoleConnection> {
+    return this.rest.request("put", "/users/@me/applications/{application_id}/role-connection", {
+      auth: `Bearer ${accessToken}`,
+      path: { application_id: this.#options.clientId },
+      body,
+    });
+  }
+
+  /** Requires `role_connections.write`. */
+  deleteRoleConnection(accessToken: string): Promise<void> {
+    return this.rest.request("delete", "/users/@me/applications/{application_id}/role-connection", {
+      auth: `Bearer ${accessToken}`,
+      path: { application_id: this.#options.clientId },
+    });
   }
 
   /**
@@ -95,18 +152,12 @@ export class DiscordOAuth2 {
     body: AddGuildMemberBody = {},
   ): Promise<"added" | "already_member"> {
     if (!this.#options.botToken) throw new Error("joinGuild requires the botToken option");
-    const res = await this.#fetch(
-      `/guilds/${encodeURIComponent(guildId)}/members/${encodeURIComponent(userId)}`,
-      {
-        method: "PUT",
-        headers: {
-          Authorization: `Bot ${this.#options.botToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ...body, access_token: accessToken }),
-      },
-    );
-    return res.status === 201 ? "added" : "already_member";
+    const member = await this.rest.request("put", "/guilds/{guild_id}/members/{user_id}", {
+      auth: `Bot ${this.#options.botToken}`,
+      path: { guild_id: guildId, user_id: userId },
+      body: { ...body, access_token: accessToken },
+    });
+    return member === undefined ? "already_member" : "added";
   }
 
   #form(params: Record<string, string>): URLSearchParams {
@@ -118,34 +169,7 @@ export class DiscordOAuth2 {
   }
 
   async #token(params: Record<string, string>): Promise<TokenResponse> {
-    const res = await this.#fetch("/oauth2/token", { method: "POST", body: this.#form(params) });
+    const res = await this.rest.raw("/oauth2/token", { method: "POST", body: this.#form(params) });
     return res.json();
-  }
-
-  async #bearer<T>(accessToken: string, path: string): Promise<T> {
-    const res = await this.#fetch(path, { headers: { Authorization: `Bearer ${accessToken}` } });
-    return res.json();
-  }
-
-  async #fetch(path: string, init: RequestInit): Promise<Response> {
-    for (let attempt = 0; ; attempt++) {
-      const res = await this.#options.fetch(`${API_BASE}${path}`, {
-        ...init,
-        signal: AbortSignal.timeout(this.#options.timeout),
-      });
-      if (res.ok) return res;
-
-      const body: unknown = await res.json().catch(() => null);
-      if (res.status === 429 && attempt < this.#options.maxRetries) {
-        const retryAfter = Number(
-          (body as { retry_after?: number } | null)?.retry_after ??
-            res.headers.get("retry-after") ??
-            1,
-        );
-        await new Promise((resolve) => setTimeout(resolve, retryAfter * 1000));
-        continue;
-      }
-      throw new DiscordOAuth2Error(res.status, body);
-    }
   }
 }

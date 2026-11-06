@@ -23,9 +23,25 @@ avatarUrl(user, 256);
 await oauth.getGuilds(access_token, { with_counts: true });
 await oauth.joinGuild(access_token, guildId, user.id); // "added" | "already_member"
 await oauth.refreshToken(refresh_token);
+
+// also: getUserInfo (openid), getGuildMember, getConnections, getEntitlements,
+// get/update/deleteRoleConnection (Linked Roles), clientCredentials, revokeToken
 ```
 
 If Discord returns a non-2xx response, the method throws `DiscordOAuth2Error` (`status`, `body`). A 429 is retried using `retry_after`, up to `maxRetries` times (default 3).
+
+## Typed REST
+
+`oauth.rest` (or `new REST()`) calls any endpoint in the bundled schema with path params, query, body and response typed from the spec:
+
+```ts
+const member = await oauth.rest.request("get", "/users/@me/guilds/{guild_id}/member", {
+  auth: `Bearer ${access_token}`,
+  path: { guild_id: guildId },
+});
+```
+
+`rest.raw(path, init)` is the untyped fallback (same timeout / 429 retry / error handling).
 
 ## Migrating from Distopia `OAuth2Controller`
 
