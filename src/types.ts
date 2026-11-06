@@ -45,8 +45,14 @@ export type TokenResponse = {
   };
 };
 
+/**
+ * Any {@link OAuth2Scope} with editor completion, plus any other string so scopes Discord adds
+ * before the next regeneration still type-check.
+ */
+export type OAuth2ScopeInput = OAuth2Scope | (string & {});
+
 export type AuthorizeUrlOptions = {
-  scope: OAuth2Scope[];
+  scope: OAuth2ScopeInput[];
   state?: string;
   prompt?: "consent" | "none";
   /** Installation context when `scope` includes `applications.commands`: 0 guild, 1 user. */

@@ -1,5 +1,4 @@
 import { REST } from "./rest.ts";
-import type { OAuth2Scope } from "./schema.auto.ts";
 import type {
   AddGroupDMRecipientBody,
   AddGuildMemberBody,
@@ -11,6 +10,7 @@ import type {
   GuildMember,
   ListEntitlementsQuery,
   ListGuildsQuery,
+  OAuth2ScopeInput,
   PartialGuild,
   RoleConnection,
   TokenResponse,
@@ -54,7 +54,7 @@ export class DiscordOAuth2 {
   }
 
   /** Token for the app's own (bot owner's) account; no refresh token is issued. */
-  clientCredentials(scope: OAuth2Scope[]): Promise<Omit<TokenResponse, "refresh_token">> {
+  clientCredentials(scope: OAuth2ScopeInput[]): Promise<Omit<TokenResponse, "refresh_token">> {
     return this.#token({ grant_type: "client_credentials", scope: scope.join(" ") });
   }
 
