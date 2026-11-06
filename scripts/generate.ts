@@ -15,15 +15,44 @@ const KEEP: Record<string, string[]> = {
   "/oauth2/userinfo": ["get"],
   "/users/@me/applications/{application_id}/role-connection": ["get", "put", "delete"],
   "/users/@me/applications/{application_id}/entitlements": ["get"],
+  // gdm.join (bot token + the user's access_token in the body)
+  "/channels/{channel_id}/recipients/{user_id}": ["put"],
+  // applications.commands.update (client credentials Bearer token)
+  "/applications/{application_id}/commands": ["get", "put", "post"],
+  "/applications/{application_id}/commands/{command_id}": ["get", "patch", "delete"],
+  "/applications/{application_id}/guilds/{guild_id}/commands": ["get", "put", "post"],
+  "/applications/{application_id}/guilds/{guild_id}/commands/{command_id}": [
+    "get",
+    "patch",
+    "delete",
+  ],
+  // applications.commands.permissions.update (user Bearer token)
+  "/applications/{application_id}/guilds/{guild_id}/commands/permissions": ["get"],
+  "/applications/{application_id}/guilds/{guild_id}/commands/{command_id}/permissions": [
+    "get",
+    "put",
+  ],
+  // applications.entitlements
+  "/applications/{application_id}/entitlements": ["get"],
+  "/applications/{application_id}/entitlements/{entitlement_id}": ["get", "delete"],
+  "/applications/{application_id}/entitlements/{entitlement_id}/consume": ["post"],
 };
+
+// Scopes documented at https://discord.com/developers/docs/topics/oauth2 and in the Social SDK docs
+// but absent from the spec.
+const DOC_ONLY_SCOPES = ["identify.premium", "sdk.social_layer", "sdk.social_layer_presence"];
+
+// Not returned by any kept path, but part of the bot / webhook.incoming token response.
+const EXTRA_SCHEMAS = ["GuildResponse", "ApplicationIncomingWebhookResponse"];
 
 const spec = await (await fetch(SPEC_URL)).json();
 
 // securitySchemes misses some scopes operations require (e.g. applications.commands.update),
 // so collect both before trimming.
-const scopes = new Set<string>(
-  Object.keys(spec.components.securitySchemes.OAuth2.flows.authorizationCode.scopes),
-);
+const scopes = new Set<string>([
+  ...Object.keys(spec.components.securitySchemes.OAuth2.flows.authorizationCode.scopes),
+  ...DOC_ONLY_SCOPES,
+]);
 for (const item of Object.values<Record<string, { security?: Record<string, string[]>[] }>>(
   spec.paths,
 ))
@@ -51,7 +80,7 @@ const walk = (node: unknown): void => {
     } else walk(value);
   }
 };
-walk(spec.paths);
+walk([spec.paths, ...EXTRA_SCHEMAS.map((name) => ({ $ref: `#/components/schemas/${name}` }))]);
 
 for (const [section, entries] of Object.entries<Record<string, unknown>>(spec.components)) {
   if (section === "securitySchemes") continue;

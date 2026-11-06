@@ -153,6 +153,196 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/channels/{channel_id}/recipients/{user_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        channel_id: components["schemas"]["SnowflakeType"];
+        user_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    get?: never;
+    put: operations["add_group_dm_user"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/applications/{application_id}/commands": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    get: operations["list_application_commands"];
+    put: operations["bulk_set_application_commands"];
+    post: operations["create_application_command"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/applications/{application_id}/commands/{command_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+        command_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    get: operations["get_application_command"];
+    put?: never;
+    post?: never;
+    delete: operations["delete_application_command"];
+    options?: never;
+    head?: never;
+    patch: operations["update_application_command"];
+    trace?: never;
+  };
+  "/applications/{application_id}/guilds/{guild_id}/commands": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+        guild_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    get: operations["list_guild_application_commands"];
+    put: operations["bulk_set_guild_application_commands"];
+    post: operations["create_guild_application_command"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/applications/{application_id}/guilds/{guild_id}/commands/{command_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+        guild_id: components["schemas"]["SnowflakeType"];
+        command_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    get: operations["get_guild_application_command"];
+    put?: never;
+    post?: never;
+    delete: operations["delete_guild_application_command"];
+    options?: never;
+    head?: never;
+    patch: operations["update_guild_application_command"];
+    trace?: never;
+  };
+  "/applications/{application_id}/guilds/{guild_id}/commands/permissions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+        guild_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    get: operations["list_guild_application_command_permissions"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/applications/{application_id}/guilds/{guild_id}/commands/{command_id}/permissions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+        guild_id: components["schemas"]["SnowflakeType"];
+        command_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    get: operations["get_guild_application_command_permissions"];
+    put: operations["set_guild_application_command_permissions"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/applications/{application_id}/entitlements": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    get: operations["get_entitlements"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/applications/{application_id}/entitlements/{entitlement_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+        entitlement_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    get: operations["get_entitlement"];
+    put?: never;
+    post?: never;
+    delete: operations["delete_entitlement"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/applications/{application_id}/entitlements/{entitlement_id}/consume": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+        entitlement_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations["consume_entitlement"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -161,6 +351,651 @@ export interface components {
       id: string;
       name: string | null;
     };
+    /** Format: int32 */
+    AfkTimeouts: number & (60 | 300 | 900 | 1800 | 3600);
+    ApplicationCommandAttachmentOption: {
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 11;
+      name: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description: string;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      required?: boolean | null;
+      file_types?: string[] | null;
+    };
+    ApplicationCommandAttachmentOptionResponse: {
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 11;
+      name: string;
+      name_localized?: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description: string;
+      description_localized?: string;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      required?: boolean;
+      file_types?: string[];
+    };
+    ApplicationCommandBooleanOption: {
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 5;
+      name: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description: string;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      required?: boolean | null;
+    };
+    ApplicationCommandBooleanOptionResponse: {
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 5;
+      name: string;
+      name_localized?: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description: string;
+      description_localized?: string;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      required?: boolean;
+    };
+    ApplicationCommandChannelOption: {
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 7;
+      name: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description: string;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      required?: boolean | null;
+      channel_types?: components["schemas"]["ChannelTypes"][] | null;
+    };
+    ApplicationCommandChannelOptionResponse: {
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 7;
+      name: string;
+      name_localized?: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description: string;
+      description_localized?: string;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      required?: boolean;
+      channel_types?: components["schemas"]["ChannelTypes"][];
+    };
+    ApplicationCommandCreateRequest: {
+      name: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description?: string | null;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      options?:
+        | (
+            | components["schemas"]["ApplicationCommandAttachmentOption"]
+            | components["schemas"]["ApplicationCommandBooleanOption"]
+            | components["schemas"]["ApplicationCommandChannelOption"]
+            | components["schemas"]["ApplicationCommandIntegerOption"]
+            | components["schemas"]["ApplicationCommandMentionableOption"]
+            | components["schemas"]["ApplicationCommandNumberOption"]
+            | components["schemas"]["ApplicationCommandRoleOption"]
+            | components["schemas"]["ApplicationCommandStringOption"]
+            | components["schemas"]["ApplicationCommandSubcommandGroupOption"]
+            | components["schemas"]["ApplicationCommandSubcommandOption"]
+            | components["schemas"]["ApplicationCommandUserOption"]
+          )[]
+        | null;
+      default_member_permissions?: number | null;
+      dm_permission?: boolean | null;
+      contexts?: components["schemas"]["InteractionContextType"][] | null;
+      integration_types?: components["schemas"]["ApplicationIntegrationType"][] | null;
+      /** @description Determines whether the interaction is handled by the app's interactions handler or by Discord */
+      handler?: null | components["schemas"]["ApplicationCommandHandler"];
+      type?: null | components["schemas"]["ApplicationCommandType"];
+    };
+    /** Format: int32 */
+    ApplicationCommandHandler: number & (1 | 2);
+    ApplicationCommandIntegerOption: {
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 4;
+      name: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description: string;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      required?: boolean | null;
+      autocomplete?: boolean | null;
+      choices?: components["schemas"]["ApplicationCommandOptionIntegerChoice"][] | null;
+      min_value?: null | components["schemas"]["Int53Type"];
+      max_value?: null | components["schemas"]["Int53Type"];
+    };
+    ApplicationCommandIntegerOptionResponse: {
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 4;
+      name: string;
+      name_localized?: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description: string;
+      description_localized?: string;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      required?: boolean;
+      autocomplete?: boolean;
+      choices?: components["schemas"]["ApplicationCommandOptionIntegerChoiceResponse"][];
+      min_value?: components["schemas"]["Int53Type"];
+      max_value?: components["schemas"]["Int53Type"];
+    };
+    ApplicationCommandMentionableOption: {
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 9;
+      name: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description: string;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      required?: boolean | null;
+    };
+    ApplicationCommandMentionableOptionResponse: {
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 9;
+      name: string;
+      name_localized?: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description: string;
+      description_localized?: string;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      required?: boolean;
+    };
+    ApplicationCommandNumberOption: {
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 10;
+      name: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description: string;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      required?: boolean | null;
+      autocomplete?: boolean | null;
+      choices?: components["schemas"]["ApplicationCommandOptionNumberChoice"][] | null;
+      /** Format: double */
+      min_value?: number | null;
+      /** Format: double */
+      max_value?: number | null;
+    };
+    ApplicationCommandNumberOptionResponse: {
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 10;
+      name: string;
+      name_localized?: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description: string;
+      description_localized?: string;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      required?: boolean;
+      autocomplete?: boolean;
+      choices?: components["schemas"]["ApplicationCommandOptionNumberChoiceResponse"][];
+      /** Format: double */
+      min_value?: number;
+      /** Format: double */
+      max_value?: number;
+    };
+    ApplicationCommandOptionIntegerChoice: {
+      name: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      value: components["schemas"]["Int53Type"];
+    };
+    ApplicationCommandOptionIntegerChoiceResponse: {
+      name: string;
+      name_localized?: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      value: components["schemas"]["Int53Type"];
+    };
+    ApplicationCommandOptionNumberChoice: {
+      name: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      /** Format: double */
+      value: number;
+    };
+    ApplicationCommandOptionNumberChoiceResponse: {
+      name: string;
+      name_localized?: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      /** Format: double */
+      value: number;
+    };
+    ApplicationCommandOptionStringChoice: {
+      name: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      value: string;
+    };
+    ApplicationCommandOptionStringChoiceResponse: {
+      name: string;
+      name_localized?: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      value: string;
+    };
+    /** Format: int32 */
+    ApplicationCommandOptionType: number & (1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11);
+    ApplicationCommandPatchRequestPartial: {
+      name?: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description?: string | null;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      options?:
+        | (
+            | components["schemas"]["ApplicationCommandAttachmentOption"]
+            | components["schemas"]["ApplicationCommandBooleanOption"]
+            | components["schemas"]["ApplicationCommandChannelOption"]
+            | components["schemas"]["ApplicationCommandIntegerOption"]
+            | components["schemas"]["ApplicationCommandMentionableOption"]
+            | components["schemas"]["ApplicationCommandNumberOption"]
+            | components["schemas"]["ApplicationCommandRoleOption"]
+            | components["schemas"]["ApplicationCommandStringOption"]
+            | components["schemas"]["ApplicationCommandSubcommandGroupOption"]
+            | components["schemas"]["ApplicationCommandSubcommandOption"]
+            | components["schemas"]["ApplicationCommandUserOption"]
+          )[]
+        | null;
+      default_member_permissions?: number | null;
+      dm_permission?: boolean | null;
+      contexts?: components["schemas"]["InteractionContextType"][] | null;
+      integration_types?: components["schemas"]["ApplicationIntegrationType"][] | null;
+      /** @description Determines whether the interaction is handled by the app's interactions handler or by Discord */
+      handler?: null | components["schemas"]["ApplicationCommandHandler"];
+    };
+    ApplicationCommandPermission: {
+      id: components["schemas"]["SnowflakeType"];
+      type: components["schemas"]["ApplicationCommandPermissionType"];
+      permission: boolean;
+    };
+    /** Format: int32 */
+    ApplicationCommandPermissionType: number & (1 | 2 | 3);
+    ApplicationCommandResponse: {
+      id: components["schemas"]["SnowflakeType"];
+      application_id: components["schemas"]["SnowflakeType"];
+      version: components["schemas"]["SnowflakeType"];
+      default_member_permissions: string | null;
+      type: components["schemas"]["ApplicationCommandType"];
+      name: string;
+      name_localized?: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description: string;
+      description_localized?: string;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      guild_id?: components["schemas"]["SnowflakeType"];
+      dm_permission?: boolean;
+      contexts?: components["schemas"]["InteractionContextType"][] | null;
+      integration_types?: components["schemas"]["ApplicationIntegrationType"][];
+      options?: (
+        | components["schemas"]["ApplicationCommandAttachmentOptionResponse"]
+        | components["schemas"]["ApplicationCommandBooleanOptionResponse"]
+        | components["schemas"]["ApplicationCommandChannelOptionResponse"]
+        | components["schemas"]["ApplicationCommandIntegerOptionResponse"]
+        | components["schemas"]["ApplicationCommandMentionableOptionResponse"]
+        | components["schemas"]["ApplicationCommandNumberOptionResponse"]
+        | components["schemas"]["ApplicationCommandRoleOptionResponse"]
+        | components["schemas"]["ApplicationCommandStringOptionResponse"]
+        | components["schemas"]["ApplicationCommandSubcommandGroupOptionResponse"]
+        | components["schemas"]["ApplicationCommandSubcommandOptionResponse"]
+        | components["schemas"]["ApplicationCommandUserOptionResponse"]
+      )[];
+      nsfw?: boolean;
+      /** @description Determines whether the interaction is handled by the app's interactions handler or by Discord */
+      handler?: components["schemas"]["ApplicationCommandHandler"];
+    };
+    ApplicationCommandRoleOption: {
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 8;
+      name: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description: string;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      required?: boolean | null;
+    };
+    ApplicationCommandRoleOptionResponse: {
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 8;
+      name: string;
+      name_localized?: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description: string;
+      description_localized?: string;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      required?: boolean;
+    };
+    ApplicationCommandStringOption: {
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 3;
+      name: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description: string;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      required?: boolean | null;
+      autocomplete?: boolean | null;
+      min_length?: number | null;
+      max_length?: number | null;
+      choices?: components["schemas"]["ApplicationCommandOptionStringChoice"][] | null;
+    };
+    ApplicationCommandStringOptionResponse: {
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 3;
+      name: string;
+      name_localized?: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description: string;
+      description_localized?: string;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      required?: boolean;
+      autocomplete?: boolean;
+      choices?: components["schemas"]["ApplicationCommandOptionStringChoiceResponse"][];
+      /** Format: int32 */
+      min_length?: number;
+      /** Format: int32 */
+      max_length?: number;
+    };
+    ApplicationCommandSubcommandGroupOption: {
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 2;
+      name: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description: string;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      required?: boolean | null;
+      options?: components["schemas"]["ApplicationCommandSubcommandOption"][] | null;
+    };
+    ApplicationCommandSubcommandGroupOptionResponse: {
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 2;
+      name: string;
+      name_localized?: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description: string;
+      description_localized?: string;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      required?: boolean;
+      options?: components["schemas"]["ApplicationCommandSubcommandOptionResponse"][];
+    };
+    ApplicationCommandSubcommandOption: {
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 1;
+      name: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description: string;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      required?: boolean | null;
+      options?:
+        | (
+            | components["schemas"]["ApplicationCommandAttachmentOption"]
+            | components["schemas"]["ApplicationCommandBooleanOption"]
+            | components["schemas"]["ApplicationCommandChannelOption"]
+            | components["schemas"]["ApplicationCommandIntegerOption"]
+            | components["schemas"]["ApplicationCommandMentionableOption"]
+            | components["schemas"]["ApplicationCommandNumberOption"]
+            | components["schemas"]["ApplicationCommandRoleOption"]
+            | components["schemas"]["ApplicationCommandStringOption"]
+            | components["schemas"]["ApplicationCommandUserOption"]
+          )[]
+        | null;
+    };
+    ApplicationCommandSubcommandOptionResponse: {
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 1;
+      name: string;
+      name_localized?: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description: string;
+      description_localized?: string;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      required?: boolean;
+      options?: (
+        | components["schemas"]["ApplicationCommandAttachmentOptionResponse"]
+        | components["schemas"]["ApplicationCommandBooleanOptionResponse"]
+        | components["schemas"]["ApplicationCommandChannelOptionResponse"]
+        | components["schemas"]["ApplicationCommandIntegerOptionResponse"]
+        | components["schemas"]["ApplicationCommandMentionableOptionResponse"]
+        | components["schemas"]["ApplicationCommandNumberOptionResponse"]
+        | components["schemas"]["ApplicationCommandRoleOptionResponse"]
+        | components["schemas"]["ApplicationCommandStringOptionResponse"]
+        | components["schemas"]["ApplicationCommandUserOptionResponse"]
+      )[];
+    };
+    /** Format: int32 */
+    ApplicationCommandType: number & (1 | 2 | 3 | 4);
+    ApplicationCommandUpdateRequest: {
+      name: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description?: string | null;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      options?:
+        | (
+            | components["schemas"]["ApplicationCommandAttachmentOption"]
+            | components["schemas"]["ApplicationCommandBooleanOption"]
+            | components["schemas"]["ApplicationCommandChannelOption"]
+            | components["schemas"]["ApplicationCommandIntegerOption"]
+            | components["schemas"]["ApplicationCommandMentionableOption"]
+            | components["schemas"]["ApplicationCommandNumberOption"]
+            | components["schemas"]["ApplicationCommandRoleOption"]
+            | components["schemas"]["ApplicationCommandStringOption"]
+            | components["schemas"]["ApplicationCommandSubcommandGroupOption"]
+            | components["schemas"]["ApplicationCommandSubcommandOption"]
+            | components["schemas"]["ApplicationCommandUserOption"]
+          )[]
+        | null;
+      default_member_permissions?: number | null;
+      dm_permission?: boolean | null;
+      contexts?: components["schemas"]["InteractionContextType"][] | null;
+      integration_types?: components["schemas"]["ApplicationIntegrationType"][] | null;
+      /** @description Determines whether the interaction is handled by the app's interactions handler or by Discord */
+      handler?: null | components["schemas"]["ApplicationCommandHandler"];
+      type?: null | components["schemas"]["ApplicationCommandType"];
+      id?: null | components["schemas"]["SnowflakeType"];
+    };
+    ApplicationCommandUserOption: {
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 6;
+      name: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description: string;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      required?: boolean | null;
+    };
+    ApplicationCommandUserOptionResponse: {
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 6;
+      name: string;
+      name_localized?: string;
+      name_localizations?: {
+        [key: string]: string;
+      } | null;
+      description: string;
+      description_localized?: string;
+      description_localizations?: {
+        [key: string]: string;
+      } | null;
+      required?: boolean;
+    };
+    ApplicationIncomingWebhookResponse: {
+      application_id: null | components["schemas"]["SnowflakeType"];
+      avatar: string | null;
+      channel_id: null | components["schemas"]["SnowflakeType"];
+      guild_id?: null | components["schemas"]["SnowflakeType"];
+      id: components["schemas"]["SnowflakeType"];
+      name: string;
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 3;
+      user?: components["schemas"]["UserResponse"];
+    };
+    /** Format: int32 */
+    ApplicationIntegrationType: number & (0 | 1);
     ApplicationIntegrationTypeConfigurationResponse: {
       oauth2_install_params?: components["schemas"]["ApplicationOAuth2InstallParamsResponse"];
     };
@@ -256,6 +1091,19 @@ export interface components {
       access_token: string;
       flags?: number | null;
     };
+    /** Format: int32 */
+    ChannelTypes: number & (1 | 3 | 0 | 2 | 4 | 5 | 10 | 11 | 12 | 13 | 14 | 15);
+    CommandPermissionResponse: {
+      id: components["schemas"]["SnowflakeType"];
+      type: components["schemas"]["ApplicationCommandPermissionType"];
+      permission: boolean;
+    };
+    CommandPermissionsResponse: {
+      id: components["schemas"]["SnowflakeType"];
+      application_id: components["schemas"]["SnowflakeType"];
+      guild_id: components["schemas"]["SnowflakeType"];
+      permissions: components["schemas"]["CommandPermissionResponse"][];
+    };
     ConnectedAccountGuildResponse: {
       id: components["schemas"]["SnowflakeType"];
       name: string;
@@ -309,6 +1157,16 @@ export interface components {
     };
     /** Format: int32 */
     ConnectedAccountVisibility: number & (0 | 1);
+    EmojiResponse: {
+      id: components["schemas"]["SnowflakeType"];
+      name: string;
+      user?: components["schemas"]["UserResponse"];
+      roles: components["schemas"]["SnowflakeType"][];
+      require_colons: boolean;
+      managed: boolean;
+      animated: boolean;
+      available: boolean;
+    };
     EntitlementResponse: {
       id: components["schemas"]["SnowflakeType"];
       sku_id: components["schemas"]["SnowflakeType"];
@@ -334,6 +1192,8 @@ export interface components {
     EntitlementTenantFulfillmentStatusResponse: number & (0 | 1 | 2 | 3 | 4 | 5 | 6 | 7);
     /** Format: int32 */
     EntitlementTypes: number & (8 | 10);
+    /** Format: int32 */
+    GuildExplicitContentFilterTypes: number & (0 | 1 | 2);
     GuildFeatures: string &
       (
         | "ANIMATED_BANNER"
@@ -366,6 +1226,20 @@ export interface components {
         | "WELCOME_SCREEN_ENABLED"
         | "OFFICIAL_GAME_GUILD"
       );
+    GuildIncidentsDataResponse: {
+      /**
+       * Format: date-time
+       * @description When invites get enabled again
+       */
+      invites_disabled_until: string | null;
+      /**
+       * Format: date-time
+       * @description When direct messages get enabled again
+       */
+      dms_disabled_until: string | null;
+    };
+    /** Format: int32 */
+    GuildMFALevel: number & (0 | 1);
     GuildMemberResponse: {
       /** @description the member's guild avatar hash */
       avatar: string | null;
@@ -408,9 +1282,112 @@ export interface components {
       /** @description whether the user is deafened in voice channels */
       deaf: boolean;
     };
+    /** Format: int32 */
+    GuildNSFWContentLevel: number & (0 | 1 | 2 | 3);
+    GuildResponse: {
+      id: components["schemas"]["SnowflakeType"];
+      name: string;
+      icon: string | null;
+      description: string | null;
+      home_header: string | null;
+      splash: string | null;
+      discovery_splash: string | null;
+      features: components["schemas"]["GuildFeatures"][];
+      banner: string | null;
+      owner_id: components["schemas"]["SnowflakeType"];
+      application_id: null | components["schemas"]["SnowflakeType"];
+      region: string;
+      afk_channel_id: null | components["schemas"]["SnowflakeType"];
+      afk_timeout: components["schemas"]["AfkTimeouts"];
+      system_channel_id: null | components["schemas"]["SnowflakeType"];
+      /** Format: int32 */
+      system_channel_flags: number;
+      widget_enabled: boolean;
+      widget_channel_id: null | components["schemas"]["SnowflakeType"];
+      verification_level: components["schemas"]["VerificationLevels"];
+      roles: components["schemas"]["GuildRoleResponse"][];
+      default_message_notifications: components["schemas"]["UserNotificationSettings"];
+      mfa_level: components["schemas"]["GuildMFALevel"];
+      explicit_content_filter: components["schemas"]["GuildExplicitContentFilterTypes"];
+      /** Format: int32 */
+      max_presences: number | null;
+      /** Format: int32 */
+      max_members: number;
+      /** Format: int32 */
+      max_stage_video_channel_users: number;
+      /** Format: int32 */
+      max_video_channel_users: number;
+      vanity_url_code: string | null;
+      premium_tier: components["schemas"]["PremiumGuildTiers"];
+      /** Format: int32 */
+      premium_subscription_count: number;
+      preferred_locale: components["schemas"]["AvailableLocalesEnum"];
+      rules_channel_id: null | components["schemas"]["SnowflakeType"];
+      safety_alerts_channel_id: null | components["schemas"]["SnowflakeType"];
+      public_updates_channel_id: null | components["schemas"]["SnowflakeType"];
+      premium_progress_bar_enabled: boolean;
+      /** Format: date-time */
+      premium_progress_bar_enabled_user_updated_at?: string | null;
+      nsfw: boolean;
+      nsfw_level: components["schemas"]["GuildNSFWContentLevel"];
+      emojis: components["schemas"]["EmojiResponse"][];
+      stickers: components["schemas"]["GuildStickerResponse"][];
+      incidents_data: null | components["schemas"]["GuildIncidentsDataResponse"];
+    };
+    GuildRoleColorsResponse: {
+      /** Format: int32 */
+      primary_color: number;
+      /** Format: int32 */
+      secondary_color: number | null;
+      /** Format: int32 */
+      tertiary_color: number | null;
+    };
+    GuildRoleResponse: {
+      id: components["schemas"]["SnowflakeType"];
+      name: string;
+      permissions: string;
+      /** Format: int32 */
+      position: number;
+      /** Format: int32 */
+      color: number;
+      colors: components["schemas"]["GuildRoleColorsResponse"];
+      hoist: boolean;
+      managed: boolean;
+      mentionable: boolean;
+      icon: string | null;
+      unicode_emoji: string | null;
+      tags?: components["schemas"]["GuildRoleTagsResponse"];
+      /** Format: int32 */
+      flags: number;
+    };
+    GuildRoleTagsResponse: {
+      premium_subscriber?: null;
+      bot_id?: components["schemas"]["SnowflakeType"];
+      integration_id?: components["schemas"]["SnowflakeType"];
+      subscription_listing_id?: components["schemas"]["SnowflakeType"];
+      available_for_purchase?: null;
+      guild_connections?: null;
+    };
+    GuildStickerResponse: {
+      id: components["schemas"]["SnowflakeType"];
+      name: string;
+      tags: string;
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 2;
+      format_type: null | components["schemas"]["StickerFormatTypes"];
+      description: string | null;
+      available: boolean;
+      guild_id: components["schemas"]["SnowflakeType"];
+      user?: components["schemas"]["UserResponse"];
+    };
     /** Format: int64 */
     Int53Type: number;
     IntegrationTypes: string & ("discord" | "twitch" | "youtube" | "guild_subscription");
+    /** Format: int32 */
+    InteractionContextType: number & (0 | 1 | 2);
     MyGuildResponse: {
       id: components["schemas"]["SnowflakeType"];
       name: string;
@@ -493,7 +1470,42 @@ export interface components {
         | "openid"
       );
     /** Format: int32 */
+    PremiumGuildTiers: number & (0 | 1 | 2 | 3);
+    /** Format: int32 */
     PremiumTypes: number & (0 | 1 | 2 | 3);
+    PrivateChannelResponse: {
+      id: components["schemas"]["SnowflakeType"];
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 1;
+      last_message_id?: null | components["schemas"]["SnowflakeType"];
+      /** Format: int32 */
+      flags: number;
+      /** Format: date-time */
+      last_pin_timestamp?: string | null;
+      recipients: components["schemas"]["UserResponse"][];
+    };
+    PrivateGroupChannelResponse: {
+      id: components["schemas"]["SnowflakeType"];
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 3;
+      last_message_id?: null | components["schemas"]["SnowflakeType"];
+      /** Format: int32 */
+      flags: number;
+      /** Format: date-time */
+      last_pin_timestamp?: string | null;
+      recipients: components["schemas"]["UserResponse"][];
+      name: string | null;
+      icon: string | null;
+      owner_id: components["schemas"]["SnowflakeType"];
+      managed?: boolean;
+      application_id?: components["schemas"]["SnowflakeType"];
+    };
     PrivateGuildMemberResponse: {
       /** @description the member's guild avatar hash */
       avatar: string | null;
@@ -539,6 +1551,10 @@ export interface components {
     };
     /** Format: snowflake */
     SnowflakeType: string;
+    /** Format: int32 */
+    StickerFormatTypes: number & (1 | 2 | 3 | 4);
+    /** Format: int32 */
+    StickerTypes: number & (1 | 2);
     UpdateApplicationUserRoleConnectionRequest: {
       platform_name?: string | null;
       platform_username?: string | null;
@@ -566,6 +1582,8 @@ export interface components {
       /** @description Background color of the nameplate */
       palette: components["schemas"]["NameplatePalette"];
     };
+    /** Format: int32 */
+    UserNotificationSettings: number & (0 | 1);
     UserPIIResponse: {
       /** @description the user's id */
       id: components["schemas"]["SnowflakeType"];
@@ -652,6 +1670,10 @@ export interface components {
       /** @description the user's primary guild */
       primary_guild: null | components["schemas"]["UserPrimaryGuildResponse"];
     };
+    /** Format: int32 */
+    VerificationLevels: number & (0 | 1 | 2 | 3 | 4);
+    /** Format: int32 */
+    WebhookTypes: number & (1 | 2 | 3);
     /** @description A single error, either for an API response or a specific field. */
     Error: {
       /** @description Discord internal error code. See error code reference */
@@ -1065,6 +2087,692 @@ export interface operations {
       "4XX": components["responses"]["ClientErrorResponse"];
     };
   };
+  add_group_dm_user: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        channel_id: components["schemas"]["SnowflakeType"];
+        user_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          access_token?: string | null;
+          nick?: string | null;
+        };
+      };
+    };
+    responses: {
+      /** @description 201 response for add_group_dm_user */
+      201: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json":
+            | components["schemas"]["PrivateChannelResponse"]
+            | components["schemas"]["PrivateGroupChannelResponse"];
+        };
+      };
+      /** @description 204 response for add_group_dm_user */
+      204: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
+  list_application_commands: {
+    parameters: {
+      query?: {
+        with_localizations?: boolean;
+      };
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 200 response for list_application_commands */
+      200: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ApplicationCommandResponse"][] | null;
+        };
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
+  bulk_set_application_commands: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ApplicationCommandUpdateRequest"][] | null;
+      };
+    };
+    responses: {
+      /** @description 200 response for bulk_set_application_commands */
+      200: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ApplicationCommandResponse"][] | null;
+        };
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
+  create_application_command: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ApplicationCommandCreateRequest"];
+      };
+    };
+    responses: {
+      /** @description 200 response for create_application_command */
+      200: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ApplicationCommandResponse"];
+        };
+      };
+      /** @description 201 response for create_application_command */
+      201: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ApplicationCommandResponse"];
+        };
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
+  get_application_command: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+        command_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 200 response for get_application_command */
+      200: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ApplicationCommandResponse"];
+        };
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
+  delete_application_command: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+        command_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 204 response for delete_application_command */
+      204: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
+  update_application_command: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+        command_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ApplicationCommandPatchRequestPartial"];
+      };
+    };
+    responses: {
+      /** @description 200 response for update_application_command */
+      200: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ApplicationCommandResponse"];
+        };
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
+  list_guild_application_commands: {
+    parameters: {
+      query?: {
+        with_localizations?: boolean;
+      };
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+        guild_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 200 response for list_guild_application_commands */
+      200: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ApplicationCommandResponse"][] | null;
+        };
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
+  bulk_set_guild_application_commands: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+        guild_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ApplicationCommandUpdateRequest"][] | null;
+      };
+    };
+    responses: {
+      /** @description 200 response for bulk_set_guild_application_commands */
+      200: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ApplicationCommandResponse"][] | null;
+        };
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
+  create_guild_application_command: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+        guild_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ApplicationCommandCreateRequest"];
+      };
+    };
+    responses: {
+      /** @description 200 response for create_guild_application_command */
+      200: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ApplicationCommandResponse"];
+        };
+      };
+      /** @description 201 response for create_guild_application_command */
+      201: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ApplicationCommandResponse"];
+        };
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
+  get_guild_application_command: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+        guild_id: components["schemas"]["SnowflakeType"];
+        command_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 200 response for get_guild_application_command */
+      200: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ApplicationCommandResponse"];
+        };
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
+  delete_guild_application_command: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+        guild_id: components["schemas"]["SnowflakeType"];
+        command_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 204 response for delete_guild_application_command */
+      204: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
+  update_guild_application_command: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+        guild_id: components["schemas"]["SnowflakeType"];
+        command_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ApplicationCommandPatchRequestPartial"];
+      };
+    };
+    responses: {
+      /** @description 200 response for update_guild_application_command */
+      200: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ApplicationCommandResponse"];
+        };
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
+  list_guild_application_command_permissions: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+        guild_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 200 response for list_guild_application_command_permissions */
+      200: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CommandPermissionsResponse"][];
+        };
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
+  get_guild_application_command_permissions: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+        guild_id: components["schemas"]["SnowflakeType"];
+        command_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 200 response for get_guild_application_command_permissions */
+      200: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CommandPermissionsResponse"];
+        };
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
+  set_guild_application_command_permissions: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+        guild_id: components["schemas"]["SnowflakeType"];
+        command_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          permissions?: components["schemas"]["ApplicationCommandPermission"][] | null;
+        };
+      };
+    };
+    responses: {
+      /** @description 200 response for set_guild_application_command_permissions */
+      200: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CommandPermissionsResponse"];
+        };
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
+  get_entitlements: {
+    parameters: {
+      query?: {
+        user_id?: components["schemas"]["SnowflakeType"];
+        sku_ids?: string | (null | components["schemas"]["SnowflakeType"])[];
+        guild_id?: components["schemas"]["SnowflakeType"];
+        before?: components["schemas"]["SnowflakeType"];
+        after?: components["schemas"]["SnowflakeType"];
+        limit?: number;
+        exclude_ended?: boolean;
+        exclude_deleted?: boolean;
+        only_active?: boolean;
+      };
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 200 response for get_entitlements */
+      200: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["EntitlementResponse"][];
+        };
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
+  get_entitlement: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+        entitlement_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 200 response for get_entitlement */
+      200: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["EntitlementResponse"];
+        };
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
+  delete_entitlement: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+        entitlement_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 204 response for delete_entitlement */
+      204: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
+  consume_entitlement: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        application_id: components["schemas"]["SnowflakeType"];
+        entitlement_id: components["schemas"]["SnowflakeType"];
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 204 response for consume_entitlement */
+      204: {
+        headers: {
+          "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
+          "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
+          "X-RateLimit-Reset": components["headers"]["X-RateLimit-Reset"];
+          "X-RateLimit-Reset-After": components["headers"]["X-RateLimit-Reset-After"];
+          "X-RateLimit-Bucket": components["headers"]["X-RateLimit-Bucket"];
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      429: components["responses"]["ClientRatelimitedResponse"];
+      "4XX": components["responses"]["ClientErrorResponse"];
+    };
+  };
 }
 
 export type OAuth2Scope =
@@ -1087,6 +2795,7 @@ export type OAuth2Scope =
   | "guilds.join"
   | "guilds.members.read"
   | "identify"
+  | "identify.premium"
   | "messages.read"
   | "openid"
   | "relationships.read"
@@ -1100,5 +2809,7 @@ export type OAuth2Scope =
   | "rpc.video.write"
   | "rpc.voice.read"
   | "rpc.voice.write"
+  | "sdk.social_layer"
+  | "sdk.social_layer_presence"
   | "voice"
   | "webhook.incoming";

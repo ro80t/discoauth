@@ -1,4 +1,4 @@
-import type { OAuth2Scope, operations } from "./schema.auto.ts";
+import type { components, OAuth2Scope, operations } from "./schema.auto.ts";
 
 type Json<O extends keyof operations> = operations[O]["responses"] extends {
   200: { content: { "application/json": infer R } };
@@ -24,6 +24,10 @@ export type AddGuildMemberBody = Omit<
   operations["add_guild_member"]["requestBody"]["content"]["application/json"],
   "access_token"
 >;
+export type AddGroupDMRecipientBody = Omit<
+  operations["add_group_dm_user"]["requestBody"]["content"]["application/json"],
+  "access_token"
+>;
 
 /** `/oauth2/token` is not part of Discord's OpenAPI spec, so this one is written by hand. */
 export type TokenResponse = {
@@ -32,12 +36,26 @@ export type TokenResponse = {
   expires_in: number;
   refresh_token: string;
   scope: string;
+  /** Present when `scope` includes `bot`: the guild the bot was added to. */
+  guild?: components["schemas"]["GuildResponse"];
+  /** Present when `scope` includes `webhook.incoming`. Store `id` and `token` to execute it. */
+  webhook?: components["schemas"]["ApplicationIncomingWebhookResponse"] & {
+    token: string;
+    url: string;
+  };
 };
 
 export type AuthorizeUrlOptions = {
   scope: OAuth2Scope[];
   state?: string;
   prompt?: "consent" | "none";
+  /** Installation context when `scope` includes `applications.commands`: 0 guild, 1 user. */
+  integration_type?: 0 | 1;
+  /** Bot permissions bitfield, for the `bot` scope. */
+  permissions?: string | bigint;
+  /** Pre-selects a guild for `bot` / `webhook.incoming`. */
+  guild_id?: string;
+  disable_guild_select?: boolean;
 };
 
 export type RESTOptions = {

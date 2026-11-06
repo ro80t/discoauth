@@ -1,6 +1,7 @@
 import { REST } from "./rest.ts";
 import type { OAuth2Scope } from "./schema.auto.ts";
 import type {
+  AddGroupDMRecipientBody,
   AddGuildMemberBody,
   Authorization,
   AuthorizeUrlOptions,
@@ -28,15 +29,15 @@ export class DiscordOAuth2 {
     this.rest = new REST(options);
   }
 
-  authorizeUrl({ scope, state, prompt }: AuthorizeUrlOptions): string {
+  authorizeUrl({ scope, ...rest }: AuthorizeUrlOptions): string {
     const params = new URLSearchParams({
       client_id: this.#options.clientId,
       response_type: "code",
       redirect_uri: this.#options.redirectUri,
       scope: scope.join(" "),
     });
-    if (state) params.set("state", state);
-    if (prompt) params.set("prompt", prompt);
+    for (const [key, value] of Object.entries(rest))
+      if (value !== undefined) params.set(key, String(value));
     return `https://discord.com/oauth2/authorize?${params}`;
   }
 
@@ -158,6 +159,22 @@ export class DiscordOAuth2 {
       body: { ...body, access_token: accessToken },
     });
     return member === undefined ? "already_member" : "added";
+  }
+
+  /** Adds the user to a group DM (`gdm.join` scope + `botToken`). */
+  async addGroupDMRecipient(
+    accessToken: string,
+    channelId: string,
+    userId: string,
+    body: AddGroupDMRecipientBody = {},
+  ): Promise<void> {
+    if (!this.#options.botToken)
+      throw new Error("addGroupDMRecipient requires the botToken option");
+    await this.rest.request("put", "/channels/{channel_id}/recipients/{user_id}", {
+      auth: `Bot ${this.#options.botToken}`,
+      path: { channel_id: channelId, user_id: userId },
+      body: { ...body, access_token: accessToken },
+    });
   }
 
   #form(params: Record<string, string>): URLSearchParams {

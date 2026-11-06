@@ -25,7 +25,22 @@ await oauth.joinGuild(access_token, guildId, user.id); // "added" | "already_mem
 await oauth.refreshToken(refresh_token);
 
 // also: getUserInfo (openid), getGuildMember, getConnections, getEntitlements,
-// get/update/deleteRoleConnection (Linked Roles), clientCredentials, revokeToken
+// get/update/deleteRoleConnection (Linked Roles), addGroupDMRecipient (gdm.join),
+// clientCredentials, revokeToken
+
+// bot / webhook.incoming: extra authorize params, and the token response carries `guild` / `webhook`
+oauth.authorizeUrl({ scope: ["bot", "applications.commands"], permissions: 8n, guild_id });
+const { webhook } = await oauth.exchangeCode(code); // scope: ["webhook.incoming"]
+```
+
+`OAuth2Scope` covers every scope in the spec plus the documented-only ones (`identify.premium`, `sdk.social_layer`, `sdk.social_layer_presence`). Scopes used over RPC / gateway / Social SDK (`rpc.*`, `voice`, `activities.*`, `relationships.read`, ...) only need to be requested; Bearer-usable endpoints for `applications.commands.update`, `applications.commands.permissions.update` and `applications.entitlements` are typed in `oauth.rest`:
+
+```ts
+const { access_token } = await oauth.clientCredentials(["applications.commands.update"]);
+await oauth.rest.request("get", "/applications/{application_id}/commands", {
+  auth: `Bearer ${access_token}`,
+  path: { application_id: clientId },
+});
 ```
 
 If Discord returns a non-2xx response, the method throws `DiscordOAuth2Error` (`status`, `body`). A 429 is retried using `retry_after`, up to `maxRetries` times (default 3).

@@ -32,6 +32,33 @@ describe("DiscordOAuth2", () => {
     });
   });
 
+  it("adds bot / install params to the authorize url", () => {
+    const url = new URL(
+      setup().oauth.authorizeUrl({
+        scope: ["bot", "applications.commands"],
+        permissions: 8n,
+        guild_id: "g",
+        disable_guild_select: true,
+        integration_type: 0,
+      }),
+    );
+    expect(url.searchParams.get("permissions")).toBe("8");
+    expect(url.searchParams.get("guild_id")).toBe("g");
+    expect(url.searchParams.get("disable_guild_select")).toBe("true");
+    expect(url.searchParams.get("integration_type")).toBe("0");
+    expect(url.searchParams.has("state")).toBe(false);
+  });
+
+  it("adds a user to a group DM with the bot token", async () => {
+    const { oauth, fetch } = setup(json(204, null));
+    await oauth.addGroupDMRecipient("at", "c", "u", { nick: "n" });
+    const [url, init] = fetch.mock.calls[0]!;
+    expect(url).toBe("https://discord.com/api/v10/channels/c/recipients/u");
+    expect(init.method).toBe("PUT");
+    expect(new Headers(init.headers).get("authorization")).toBe("Bot bot");
+    expect(JSON.parse(init.body as string)).toEqual({ nick: "n", access_token: "at" });
+  });
+
   it("exchanges a code with form-encoded credentials", async () => {
     const token = { access_token: "a", refresh_token: "r" };
     const { oauth, fetch } = setup(json(200, token));
