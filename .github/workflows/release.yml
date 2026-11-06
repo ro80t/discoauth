@@ -39,10 +39,9 @@ jobs:
       # Pending changesets -> opens/updates the "Version Packages" PR.
       # No pending changesets (that PR was merged) -> publishes to npm, pushes tags, creates GitHub releases.
       - name: Version or Publish
-        uses: changesets/action@v1
+        uses: changesets/action@v2
         with:
-          version: bun run version
-          publish: bun run release
+          version-script: bun run version
+          publish-script: bun run release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
