@@ -1,0 +1,51 @@
+{
+  "name": "discoauth",
+  "version": "0.0.0",
+  "description": "Minimal Discord OAuth2 client typed from Discord's official OpenAPI spec.",
+  "keywords": [
+    "discord",
+    "oauth2"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ro80t/discoauth.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "generate": "bun scripts/generate.ts && oxfmt src/schema.auto.ts",
+    "build": "tsdown",
+    "test": "vitest run",
+    "lint": "oxfmt --check && oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "oxfmt",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "bun run build",
+    "version": "changeset version && oxfmt package.json",
+    "release": "changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "3.0.3",
+    "@types/bun": "1.4.4",
+    "openapi-typescript": "7.13.0",
+    "oxfmt": "0.76.0",
+    "oxlint": "1.91.0",
+    "tsdown": "0.23.5",
+    "typescript": "6.0.3",
+    "vitest": "5.1.0"
+  },
+  "packageManager": "bun@1.3.13"
+}

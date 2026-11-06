@@ -1,0 +1,6 @@
+{
+  "plugins": ["typescript", "unicorn", "oxc", "vitest"],
+  "categories": { "correctness": "error" },
+  "env": { "builtin": true },
+  "ignorePatterns": ["*.auto.ts", "dist/**"]
+}
