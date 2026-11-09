@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { DiscordOAuth2 } from "./client.ts";
+import { createPKCE, DiscordOAuth2 } from "./client.ts";
 import { DiscordOAuth2Error } from "./error.ts";
 
 const json = (status: number, body: unknown) =>
@@ -113,5 +113,32 @@ describe("DiscordOAuth2", () => {
     expect(fetch.mock.calls[1]![0]).toBe(
       "https://discord.com/api/v10/users/@me/applications/id/role-connection",
     );
+  });
+
+  it("runs PKCE as a public client", async () => {
+    const { verifier, challenge } = await createPKCE();
+    const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(verifier));
+    expect(challenge).toBe(Buffer.from(digest).toString("base64url"));
+
+    const fetch = vi.fn<(input: string, init: RequestInit) => Promise<Response>>();
+    fetch.mockResolvedValueOnce(json(200, {}));
+    const oauth = new DiscordOAuth2({ clientId: "id", redirectUri: "https://e.com", fetch });
+    const url = new URL(oauth.authorizeUrl({ scope: ["identify"], code_challenge: challenge }));
+    expect(url.searchParams.get("code_challenge")).toBe(challenge);
+    expect(url.searchParams.get("code_challenge_method")).toBe("S256");
+    expect(
+      new URL(oauth.authorizeUrl({ scope: ["identify"], response_type: "token" })).searchParams.get(
+        "response_type",
+      ),
+    ).toBe("token");
+
+    await oauth.exchangeCode("c", { codeVerifier: verifier });
+    expect(Object.fromEntries(fetch.mock.calls[0]![1].body as URLSearchParams)).toEqual({
+      client_id: "id",
+      grant_type: "authorization_code",
+      code: "c",
+      redirect_uri: "https://e.com",
+      code_verifier: verifier,
+    });
   });
 });

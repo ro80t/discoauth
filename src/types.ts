@@ -36,6 +36,8 @@ export type TokenResponse = {
   expires_in: number;
   refresh_token: string;
   scope: string;
+  /** Present when `scope` includes `openid`: an RS256 JWT signed by https://discord.com/api/oauth2/keys. */
+  id_token?: string;
   /** Present when `scope` includes `bot`: the guild the bot was added to. */
   guild?: components["schemas"]["GuildResponse"];
   /** Present when `scope` includes `webhook.incoming`. Store `id` and `token` to execute it. */
@@ -54,6 +56,10 @@ export type OAuth2ScopeInput = OAuth2Scope | (string & {});
 export type AuthorizeUrlOptions = {
   scope: OAuth2ScopeInput[];
   state?: string;
+  /** `token` is the implicit grant: the token comes back in the redirect URL fragment, with no refresh token. */
+  response_type?: "code" | "token";
+  /** PKCE challenge from {@link createPKCE}; `code_challenge_method=S256` is added for you. */
+  code_challenge?: string;
   prompt?: "consent" | "none";
   /** Installation context when `scope` includes `applications.commands`: 0 guild, 1 user. */
   integration_type?: 0 | 1;
@@ -62,6 +68,11 @@ export type AuthorizeUrlOptions = {
   /** Pre-selects a guild for `bot` / `webhook.incoming`. */
   guild_id?: string;
   disable_guild_select?: boolean;
+};
+
+export type ExchangeCodeOptions = {
+  /** PKCE verifier from {@link createPKCE}; required when the authorize URL had a `code_challenge`. */
+  codeVerifier?: string | undefined;
 };
 
 export type RESTOptions = {
@@ -74,7 +85,8 @@ export type RESTOptions = {
 
 export type DiscordOAuth2Options = RESTOptions & {
   clientId: string;
-  clientSecret: string;
+  /** Omit for a Public Client (PKCE without a secret). */
+  clientSecret?: string;
   redirectUri: string;
   /** Only needed for {@link DiscordOAuth2.joinGuild}. */
   botToken?: string;

@@ -3,7 +3,7 @@
 Discord OAuth2 client with no runtime dependencies. Response types are generated from [Discord's official OpenAPI spec](https://github.com/discord/discord-api-spec), keeping only the endpoints an OAuth2 app calls.
 
 ```ts
-import { avatarUrl, DiscordOAuth2 } from "discoauth";
+import { avatarUrl, createPKCE, DiscordOAuth2 } from "discoauth";
 
 const oauth = new DiscordOAuth2({
   clientId: process.env.DISCORD_CLIENT_ID!,
@@ -31,6 +31,14 @@ await oauth.refreshToken(refresh_token);
 // bot / webhook.incoming: extra authorize params, and the token response carries `guild` / `webhook`
 oauth.authorizeUrl({ scope: ["bot", "applications.commands"], permissions: 8n, guild_id });
 const { webhook } = await oauth.exchangeCode(code); // scope: ["webhook.incoming"]
+```
+
+PKCE (S256) works with or without `clientSecret` (omit it for a Public Client). `openid` adds `id_token` to the token response; `response_type: "token"` gives the implicit grant.
+
+```ts
+const { verifier, challenge } = await createPKCE(); // keep verifier in the session
+redirect(oauth.authorizeUrl({ scope: ["identify"], state, code_challenge: challenge }));
+await oauth.exchangeCode(code, { codeVerifier: verifier });
 ```
 
 `OAuth2Scope` covers every scope in the spec plus the documented-only ones (`identify.premium`, `sdk.social_layer`, `sdk.social_layer_presence`). Scopes used over RPC / gateway / Social SDK (`rpc.*`, `voice`, `activities.*`, `relationships.read`, ...) only need to be requested; Bearer-usable endpoints for `applications.commands.update`, `applications.commands.permissions.update` and `applications.entitlements` are typed in `oauth.rest`:

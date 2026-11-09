@@ -7,6 +7,7 @@ import type {
   Connection,
   DiscordOAuth2Options,
   Entitlement,
+  ExchangeCodeOptions,
   GuildMember,
   ListEntitlementsQuery,
   ListGuildsQuery,
@@ -18,6 +19,18 @@ import type {
   User,
   UserInfo,
 } from "./types.ts";
+
+/** PKCE pair: put `challenge` in the authorize URL, keep `verifier` for {@link DiscordOAuth2.exchangeCode}. */
+export async function createPKCE(): Promise<{ verifier: string; challenge: string }> {
+  const base64url = (bytes: ArrayBuffer | Uint8Array) =>
+    btoa(String.fromCharCode(...new Uint8Array(bytes)))
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/, "");
+  const verifier = base64url(crypto.getRandomValues(new Uint8Array(32)));
+  const hash = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(verifier));
+  return { verifier, challenge: base64url(hash) };
+}
 
 export class DiscordOAuth2 {
   readonly #options: DiscordOAuth2Options;
@@ -38,14 +51,16 @@ export class DiscordOAuth2 {
     });
     for (const [key, value] of Object.entries(rest))
       if (value !== undefined) params.set(key, String(value));
+    if (rest.code_challenge) params.set("code_challenge_method", "S256");
     return `https://discord.com/oauth2/authorize?${params}`;
   }
 
-  exchangeCode(code: string): Promise<TokenResponse> {
+  exchangeCode(code: string, { codeVerifier }: ExchangeCodeOptions = {}): Promise<TokenResponse> {
     return this.#token({
       grant_type: "authorization_code",
       code,
       redirect_uri: this.#options.redirectUri,
+      ...(codeVerifier && { code_verifier: codeVerifier }),
     });
   }
 
@@ -178,9 +193,10 @@ export class DiscordOAuth2 {
   }
 
   #form(params: Record<string, string>): URLSearchParams {
+    const { clientId, clientSecret } = this.#options;
     return new URLSearchParams({
-      client_id: this.#options.clientId,
-      client_secret: this.#options.clientSecret,
+      client_id: clientId,
+      ...(clientSecret && { client_secret: clientSecret }),
       ...params,
     });
   }
