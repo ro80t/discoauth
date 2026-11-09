@@ -1,6 +1,6 @@
 {
   "name": "discoauth",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Minimal Discord OAuth2 client typed from Discord's official OpenAPI spec.",
   "keywords": [
     "discord",
